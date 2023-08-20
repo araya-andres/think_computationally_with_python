@@ -34,7 +34,7 @@ def load_from_file(filename: str) -> List[List[str]]:
     maze = []
     with open(filename, "r", encoding="utf-8") as reader:
         while line := reader.readline():
-            row = [cell for cell in line.strip()]
+            row = list(line.strip())
             for pos_x, cell in enumerate(row):
                 if cell == Cell.STARTING_POINT:
                     starting_point = (pos_x, len(maze))
@@ -53,7 +53,7 @@ def set_cell(maze: List[List[str]], position: Tuple[int, int], cell_value: Cell)
 def find_path(
     maze: List[List[str]],
     current_position: Tuple[int, int],
-    heading: int,
+    heading: Direction,
     path: List[Tuple[int, int]],
 ) -> Optional[List[Tuple[int, int]]]:
     path.append(current_position)
@@ -68,11 +68,10 @@ def find_path(
         if cell == Cell.EXIT_POINT:
             path.append(new_position)
             return path
-        elif cell == Cell.EMPTY:
+        if cell == Cell.EMPTY:
             if path_to_exit := find_path(maze, new_position, new_heading, list(path)):
                 return path_to_exit
     return None
 
 
-filename = sys.argv[1]
-print(find_path(*load_from_file(filename), Direction.NORTH, []))
+print(find_path(*load_from_file(sys.argv[1]), Direction.NORTH, []))
