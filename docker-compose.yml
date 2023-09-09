@@ -1,0 +1,13 @@
+version: '3'
+services:
+  python3:
+    build:
+      context: .
+      target: dev
+    container_name: 'python-tk'
+    tty: true
+    volumes:
+      - .:/usr/src/think-computationally
+      - ${HOME}/.ssh:/root/.ssh
+    environment:
+      - DISPLAY=${IP}:0
